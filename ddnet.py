@@ -73,6 +73,7 @@ data = ctypes.c_long(0)
 mydll.ReadProcessMemory(int(phand),asm_addr,ctypes.byref(data),2,None)
 if data.value!=37008 and data.value!=4232:
     print('游戏已升级，当前版本不可使用，请使用steam更新游戏或前往gihub获取本程序更新')
+    print("https://github.com/MageDelfador/DDNet-show-points-in-game")
     print('error:game file unmatch')
     while 1:
         pass
