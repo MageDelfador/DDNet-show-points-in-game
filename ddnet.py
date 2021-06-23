@@ -47,6 +47,9 @@ def getpoints():
                         else:
                             points[pname]+=1-5
                         break
+                    except:
+                        points[pname]+=1-5
+                        break
                     txt=response.read().decode('utf-8')
                     if(txt.find('Player not found')>=0):
                         points[pname]=0
@@ -72,11 +75,11 @@ def getpoints():
 data = ctypes.c_long(0)
 mydll.ReadProcessMemory(int(phand),asm_addr,ctypes.byref(data),2,None)
 if data.value!=37008 and data.value!=4232:
-    print('游戏已升级，当前版本不可使用，请使用steam更新游戏或前往gihub获取本程序更新')
+    print('游戏已升级，当前版本不可使用，请使用steam更新游戏或前往github获取本程序更新')
     print("https://github.com/MageDelfador/DDNet-show-points-in-game")
     print('error:game file unmatch')
     while 1:
-        pass
+        time.sleep(1)
 print("程序成功加载，游戏中按tab键查看所有玩家分数")
 print("press TAB to view the scores of all players")
 print("作者ID：410164263，如果你在游戏中遇到我，一定要带我恰分哦")
