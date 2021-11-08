@@ -27,7 +27,10 @@ mydll = ctypes.windll.LoadLibrary("C:\\Windows\\System32\\kernel32.dll")
 
 lock=_thread.allocate_lock()
 points={}
-asm_addr=0x004E337D
+asm_addr=0x004E5A60
+str_addr=0
+blank_addr=0x006F3E10
+str_dis=0x1150
 def getpoints():
     while 1:
         lock.acquire()
@@ -107,7 +110,22 @@ mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
 asm_addr+=0x11
 mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
 
+asm_addr-=0x03
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr-=0x04
+data = ctypes.c_long(0x0020E33C)
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),4,None)
+asm_addr-=0x03
+data = ctypes.c_long(0x0025894C)
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+
 wait_s=1
+while str_addr == 0:
+    data = ctypes.c_long(0)
+    mydll.ReadProcessMemory(int(phand),blank_addr,ctypes.byref(data),4,None)
+    if data.value > 0:
+        str_addr = data.value + 0x11CE64
+    time.sleep(1)
 for i in range(0,thread_count):
     _thread.start_new_thread(getpoints,())
 while 1:
@@ -116,12 +134,12 @@ while 1:
         wait_s=1
     for clientid in range(0,64):
         data = ctypes.c_long(0)
-        mydll.ReadProcessMemory(int(phand),0x006F3E14+0x1050*clientid,ctypes.byref(data),3,None)
+        mydll.ReadProcessMemory(int(phand),str_addr+str_dis*clientid,ctypes.byref(data),3,None)
         name=data.value.to_bytes(3, byteorder='little')
         if name[0]==0:
             continue
         for i in range(1,6):
-            mydll.ReadProcessMemory(int(phand),0x006F3E14+i*3+0x1050*clientid,ctypes.byref(data),3,None)
+            mydll.ReadProcessMemory(int(phand),str_addr+i*3+str_dis*clientid,ctypes.byref(data),3,None)
             name+=data.value.to_bytes(3, byteorder='little')
         for i in range(0,18):
             if name[i]==0:
@@ -133,25 +151,25 @@ while 1:
                 point=points[name]
                 if point<-5:
                     data = ctypes.c_long(0)
-                    mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10,ctypes.byref(data),1,None)
+                    mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10,ctypes.byref(data),1,None)
                 elif point<0:
                     data = ctypes.c_long(0x2e)
                     for i in range(0,wait_s):
-                        mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10+i,ctypes.byref(data),1,None)
+                        mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10+i,ctypes.byref(data),1,None)
                     data = ctypes.c_long(0)
-                    mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10+wait_s,ctypes.byref(data),1,None)
+                    mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10+wait_s,ctypes.byref(data),1,None)
                 elif point>=1000:
                     data = ctypes.c_long(int.from_bytes(str(point//1000).encode(encoding='UTF-8'),byteorder='little'))
-                    mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10,ctypes.byref(data),len(str(point//1000)),None)
+                    mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10,ctypes.byref(data),len(str(point//1000)),None)
                     data = ctypes.c_long(int.from_bytes(str(point-point//1000*1000).zfill(3).encode(encoding='UTF-8'),byteorder='little'))
-                    mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10+len(str(point//1000)),ctypes.byref(data),3,None)
+                    mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10+len(str(point//1000)),ctypes.byref(data),3,None)
                     data = ctypes.c_long(0)
-                    mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10+len(str(point)),ctypes.byref(data),1,None)
+                    mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10+len(str(point)),ctypes.byref(data),1,None)
                 else:
                     data = ctypes.c_long(int.from_bytes(str(point).encode(encoding='UTF-8'),byteorder='little'))
-                    mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10,ctypes.byref(data),len(str(point)),None)
+                    mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10,ctypes.byref(data),len(str(point)),None)
                     data = ctypes.c_long(0)
-                    mydll.WriteProcessMemory(int(phand),0x006F3E14+0x1050*clientid+0x10+len(str(point)),ctypes.byref(data),1,None)
+                    mydll.WriteProcessMemory(int(phand),str_addr+str_dis*clientid+0x10+len(str(point)),ctypes.byref(data),1,None)
             else:
                 points[name]=-10
     time.sleep(0.2)
