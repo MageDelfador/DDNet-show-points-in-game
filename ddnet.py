@@ -27,9 +27,9 @@ mydll = ctypes.windll.LoadLibrary("C:\\Windows\\System32\\kernel32.dll")
 
 lock=_thread.allocate_lock()
 points={}
-asm_addr=0x004E5A60
+asm_addr=0x004E5C68
 str_addr=0
-blank_addr=0x006F3E10
+blank_addr=0x006F4018
 str_dis=0x1150
 def getpoints():
     while 1:
@@ -124,7 +124,7 @@ while str_addr == 0:
     data = ctypes.c_long(0)
     mydll.ReadProcessMemory(int(phand),blank_addr,ctypes.byref(data),4,None)
     if data.value > 0:
-        str_addr = data.value + 0x11CE64
+        str_addr = data.value + 0x2FCE74 - 0x10
     time.sleep(1)
 for i in range(0,thread_count):
     _thread.start_new_thread(getpoints,())
