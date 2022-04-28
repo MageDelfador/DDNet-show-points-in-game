@@ -10,3 +10,5 @@ DDRaceNetwork<p>
 	打开cmd或powershell，输入以下命令<p>
 		pip install pywin32<p>
 3.双击ddnet.py即可<p>
+或者<p>
+无需安装任何东西，直接下载release中的exe并运行
