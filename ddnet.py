@@ -27,10 +27,10 @@ mydll = ctypes.windll.LoadLibrary("C:\\Windows\\System32\\kernel32.dll")
 
 lock=_thread.allocate_lock()
 points={}
-asm_addr=0x004D3D90
+asm_addr=0x004E45A8
 str_addr=0
-blank_addr=0x006E20EB
-str_dis=0x1158
+blank_addr=0x006F2958
+str_dis=0x1150
 def getpoints():
     while 1:
         lock.acquire()
@@ -77,7 +77,7 @@ def getpoints():
 
 data = ctypes.c_long(0)
 mydll.ReadProcessMemory(int(phand),asm_addr,ctypes.byref(data),2,None)
-if data.value!=37008 and data.value!=19080:
+if data.value!=37008 and data.value!=4232:
     print('游戏已升级，当前版本不可使用，请使用steam更新游戏或前往github获取本程序更新')
     print("https://github.com/MageDelfador/DDNet-show-points-in-game")
     print('error:game file unmatch')
@@ -88,12 +88,26 @@ print("press TAB to view the scores of all players")
 print("作者ID：410164263，如果你在游戏中遇到我，一定要带我恰分哦")
 #不更新战队显示
 data = ctypes.c_long(2425393296) #nop
-mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
-asm_addr+=0x0C
-mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
-asm_addr+=0x0C
-mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),2,None)
 asm_addr+=0x0A
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0D
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0B
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0B
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0B
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0D
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0B
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0B
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x0B
+mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
+asm_addr+=0x11
 mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
 
 asm_addr-=0x03
@@ -102,7 +116,7 @@ asm_addr-=0x04
 data = ctypes.c_long(0x0020E33C)
 mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),4,None)
 asm_addr-=0x03
-data = ctypes.c_long(0x001D8948)
+data = ctypes.c_long(0x0025894C)
 mydll.WriteProcessMemory(int(phand),asm_addr,ctypes.byref(data),3,None)
 
 wait_s=1
@@ -110,7 +124,7 @@ while str_addr == 0:
     data = ctypes.c_long(0)
     mydll.ReadProcessMemory(int(phand),blank_addr,ctypes.byref(data),4,None)
     if data.value > 0:
-        str_addr = data.value + 0x30E06C - 0x10
+        str_addr = data.value + 0x30CE74 - 0x10
     time.sleep(1)
 for i in range(0,thread_count):
     _thread.start_new_thread(getpoints,())
