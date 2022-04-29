@@ -43,7 +43,7 @@ def getpoints():
                     sl=0
                     response=None
                     try:
-                        response = urllib.request.urlopen('https://ddnet.tw/players/'+urllib.parse.quote(pname)+'/')
+                        response = urllib.request.urlopen('https://ddnet.tw/players/'+urllib.parse.quote(pname)+'/',timeout = 10)
                     except urllib.error.HTTPError as e:
                         if e.code==404:
                             points[pname]=0
