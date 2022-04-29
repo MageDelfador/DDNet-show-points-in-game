@@ -44,7 +44,7 @@ def getpoints():
                     response=None
                     try:
                         response = urllib.request.urlopen('https://ddnet.tw/players/'+urllib.parse.quote(pname)+'/')
-                    except urllib.error.URLError as e:
+                    except urllib.error.HTTPError as e:
                         if e.code==404:
                             points[pname]=0
                         else:
