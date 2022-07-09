@@ -29,7 +29,7 @@ module_handle = module_handles[0]
 
 lock=_thread.allocate_lock()
 points={}
-asm_addr=0x0DBA50 + module_handle
+asm_addr=0x0DBA70 + module_handle
 str_addr=0
 blank_addr=0x228F98 + module_handle
 str_dis=0x12A8
@@ -87,6 +87,7 @@ if data.value!=37008 and data.value!=18568:
         time.sleep(1)
 print("程序成功加载，游戏中按tab键查看所有玩家分数")
 print("press TAB to view the scores of all players")
+print("不要关闭本窗口")
 print("作者ID：410164263，如果你在游戏中遇到我，一定要带我恰分哦")
 #不更新战队显示
 data = ctypes.c_long(2425393296) #nop
@@ -95,7 +96,7 @@ asm_addr+=0x03
 data = ctypes.c_long(0x001D8948)
 mydll.WriteProcessMemory(int(phand),ctypes.c_void_p(asm_addr),ctypes.byref(data),3,None)
 asm_addr+=0x03
-data = ctypes.c_long(0x0014D53E)
+data = ctypes.c_long(blank_addr - asm_addr - 0x0A + 0x06)
 mydll.WriteProcessMemory(int(phand),ctypes.c_void_p(asm_addr),ctypes.byref(data),3,None)
 asm_addr+=0x03
 data = ctypes.c_long(0x001EEB00)
