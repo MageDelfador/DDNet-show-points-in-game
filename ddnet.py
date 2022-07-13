@@ -29,7 +29,7 @@ module_handle = module_handles[0]
 
 lock=_thread.allocate_lock()
 points={}
-asm_addr=0x0DBA70 + module_handle
+asm_addr=0x0DBA80 + module_handle
 str_addr=0
 blank_addr=0x228F98 + module_handle
 str_dis=0x12A8
