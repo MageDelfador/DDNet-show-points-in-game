@@ -29,9 +29,9 @@ module_handle = module_handles[0]
 
 lock=_thread.allocate_lock()
 points={}
-asm_addr=0x0DBA80 + module_handle
+asm_addr=0x0DD590 + module_handle
 str_addr=0
-blank_addr=0x228F98 + module_handle
+blank_addr=0x228A98 + module_handle
 str_dis=0x12A8
 def getpoints():
     while 1:
@@ -111,7 +111,7 @@ while str_addr == 0:
     str_addr = (data.value << 24) + str_addr
     
     if str_addr > 0:
-        str_addr = str_addr + 0x32FA8C - 0x10
+        str_addr = str_addr + 0x32FC6C - 0x10
     time.sleep(1)
 for i in range(0,thread_count):
     _thread.start_new_thread(getpoints,())
