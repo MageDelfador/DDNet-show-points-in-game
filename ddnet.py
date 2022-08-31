@@ -31,7 +31,7 @@ lock=_thread.allocate_lock()
 points={}
 asm_addr=0x0DD590 + module_handle
 str_addr=0
-blank_addr=0x228A98 + module_handle
+blank_addr=0x229AC0 + module_handle
 str_dis=0x12A8
 def getpoints():
     while 1:
